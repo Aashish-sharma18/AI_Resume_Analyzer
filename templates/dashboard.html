@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="toggle" onclick="toggleDark()">🌙 Dark Mode</div>
+
+<script>
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+</script>
+
+<div class="dashboard">
+    <h2>Resume Match Dashboard</h2>
+
+    <!-- SCORE CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h3>Skill Match</h3>
+            <p>{{ skill_match }}%</p>
+        </div>
+
+        <div class="card">
+            <h3>BERT Match</h3>
+            <p>{{ bert_score }}%</p>
+        </div>
+
+        <div class="card highlight">
+            <h3>Final Score</h3>
+            <p class="big-score">{{ final_score }}%</p>
+            <span class="score-label">
+                {% if final_score < 40 %}
+                    Needs Improvement
+                {% elif final_score < 70 %}
+                    Average Match
+                {% else %}
+                    Strong Match
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="card">
+            <h3>ATS Score</h3>
+            <p>{{ ats_score }}%</p>
+        </div>
+    </div>
+
+    <!-- ACTION BUTTONS (CENTERED & CLEAN) -->
+    <div class="action-buttons centered">
+        <a href="/" class="secondary-btn">Analyze Another Resume</a>
+        <button onclick="window.print()" class="primary-btn">
+            Download Report (PDF)
+        </button>
+    </div>
+
+    <!-- EXPLANATION -->
+    <div class="info-box">
+        <h3>Why did you get this score?</h3>
+        <ul>
+            <li>Skill Match compares your skills with the job requirements</li>
+            <li>BERT Match checks semantic similarity using AI</li>
+            <li>ATS Score estimates recruiter software compatibility</li>
+        </ul>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="skill-box">
+        <h3>Matched Skills</h3>
+        <div class="skills">
+            {% for skill in matched %}
+                <span class="skill">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="skill-box">
+        <h3>Missing Skills</h3>
+        <div class="skills">
+            {% for skill in missing %}
+                <span class="skill missing">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="skill-box">
+        <h3>AI Resume Suggestions</h3>
+        <ul>
+            {% for tip in tips %}
+                <li>{{ tip }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>

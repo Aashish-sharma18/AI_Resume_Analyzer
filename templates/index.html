@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="toggle" onclick="toggleDark()">🌙 Dark Mode</div>
+
+<div class="analyzer-card">
+
+    <h1>AI Resume Analyzer</h1>
+    <p class="subtitle">
+        Upload your resume and get AI-powered insights on how well it matches the job
+    </p>
+
+    <div class="analyzer-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="analyzer-left">
+            <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+
+                <label class="label">Upload Resume</label>
+                <input type="file" name="resume" required onchange="showFileInfo(this)">
+
+                <div id="fileInfo" class="file-info"></div>
+
+                <label class="label">Select Job Role</label>
+                <select name="job">
+                    {% for i in range(jobs|length) %}
+                        <option value="{{ i }}">{{ jobs.iloc[i]['role'] }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" id="analyzeBtn">
+                    Analyze Resume 🚀
+                </button>
+            </form>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="analyzer-right">
+            <h3>What our AI will analyze</h3>
+
+            <ul class="feature-list">
+                <li>✔ Skill-to-Job Matching</li>
+                <li>✔ BERT Semantic Similarity</li>
+                <li>✔ ATS Compatibility Score</li>
+                <li>✔ Skill Gap Detection</li>
+                <li>✔ AI Resume Improvement Tips</li>
+            </ul>
+
+            <div class="note-box">
+                <strong>Tip:</strong> Use a PDF resume with clear sections like
+                Skills, Experience, Projects for best results.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function toggleDark() {
+    document.body.classList.toggle("dark");
+}
+
+function showFileInfo(input) {
+    const file = input.files[0];
+    if (file) {
+        document.getElementById("fileInfo").innerText =
+            `Selected: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    }
+}
+
+function showLoading() {
+    const btn = document.getElementById("analyzeBtn");
+    btn.innerText = "Analyzing...";
+    btn.disabled = true;
+}
+</script>
+
+</body>
+</html>
